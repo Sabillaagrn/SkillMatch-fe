@@ -114,7 +114,7 @@ export default function Profile() {
   const rows = showAll ? (profile.history || []) : (profile.history || []).slice(0, 3);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-8 md:pt-8 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>

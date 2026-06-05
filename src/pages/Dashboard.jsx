@@ -122,7 +122,7 @@ export default function Dashboard() {
   const columns = [sortedSkills.slice(0, mid), sortedSkills.slice(mid)];
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+    <div className="mx-auto max-w-6xl px-4 pt-24 pb-8 md:pt-8 sm:px-6 lg:px-8 space-y-8">
       {/* Header Section */}
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">

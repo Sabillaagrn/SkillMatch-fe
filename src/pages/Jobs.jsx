@@ -65,7 +65,7 @@ export default function Jobs() {
       : JOBS;
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
+    <div className="mx-auto max-w-5xl px-4 pt-24 pb-8 md:pt-8 sm:px-6 lg:px-8 space-y-6 sm:space-y-8 animate-in fade-in duration-500">
       {/* Back Button */}
       <button
         type="button"

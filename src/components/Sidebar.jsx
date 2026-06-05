@@ -4,6 +4,7 @@ import {
   Settings,
   User,
   LogOut,
+  LogIn,
   Briefcase,
   HelpCircle,
   Menu,
@@ -21,9 +22,23 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
+  // Cek apakah user sudah login dengan melihat email di localStorage
+  const isLoggedIn = Boolean(localStorage.getItem("email"));
+
+  const handleLogout = () => {
+    localStorage.removeItem("email"); // Hapus sesi login
+    setOpen(false);
+    navigate("/login");
+  };
+
+  const handleLogin = () => {
+    setOpen(false);
+    navigate("/login");
+  };
+
   return (
     <>
-      {/* 🔥 MOBILE TOP BAR (BURGER DI ATAS FULL WIDTH) */}
+      {/* 🔥 MOBILE TOP BAR */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-40 flex items-center justify-between border-b border-line bg-white/95 backdrop-blur-sm px-5 py-3.5 shadow-sm transition-all">
         <div className="flex items-center gap-2.5 font-extrabold text-brand-700 text-lg tracking-tight">
           <span className="grid place-items-center h-8 w-8 rounded-lg bg-brand-600 text-white shadow-sm">
@@ -41,7 +56,7 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* SPACE PENGGANTI TOPBAR (biar konten ga ketiban) */}
+      {/* SPACE PENGGANTI TOPBAR */}
       <div className="md:hidden h-16 shrink-0" />
 
       {/* DESKTOP SIDEBAR */}
@@ -76,7 +91,6 @@ export default function Sidebar() {
             >
               {({ isActive }) => (
                 <>
-                  {/* Indikator Aktif */}
                   {isActive && (
                     <span className="absolute -left-4 top-1/2 h-8 w-1.5 -translate-y-1/2 rounded-r-full bg-brand-600 shadow-sm" />
                   )}
@@ -97,26 +111,35 @@ export default function Sidebar() {
             Help Center
           </button>
 
-          <button
-            onClick={() => navigate("/login")}
-            className="group flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-sm font-bold text-rose-600 transition-all duration-200 hover:bg-rose-50 focus:outline-none"
-          >
-            <LogOut size={20} className="transition-transform group-hover:-translate-x-1" />
-            Sign Out
-          </button>
+          {/* Render tombol secara kondisional berdasarkan status login */}
+          {isLoggedIn ? (
+            <button
+              onClick={handleLogout}
+              className="group flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-sm font-bold text-rose-600 transition-all duration-200 hover:bg-rose-50 focus:outline-none"
+            >
+              <LogOut size={20} className="transition-transform group-hover:-translate-x-1" />
+              Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={handleLogin}
+              className="group flex w-full items-center gap-3.5 rounded-xl px-4 py-3 text-sm font-bold text-brand-600 transition-all duration-200 hover:bg-brand-50 focus:outline-none"
+            >
+              <LogIn size={20} className="transition-transform group-hover:translate-x-1" />
+              Log In
+            </button>
+          )}
         </div>
       </aside>
 
       {/* MOBILE DRAWER */}
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
-          {/* Overlay Background */}
           <div
             className="absolute inset-0 bg-ink/40 backdrop-blur-sm animate-in fade-in duration-300"
             onClick={() => setOpen(false)}
           />
 
-          {/* Drawer Content */}
           <div className="absolute left-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-2xl p-5 flex flex-col animate-in slide-in-from-left duration-300">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-2.5 font-extrabold text-brand-700 text-lg tracking-tight">
@@ -168,16 +191,24 @@ export default function Sidebar() {
                 Help Center
               </button>
 
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  navigate("/login");
-                }}
-                className="flex w-full items-center gap-3.5 rounded-xl px-4 py-3.5 text-sm font-bold text-rose-600 transition-colors hover:bg-rose-50"
-              >
-                <LogOut size={20} />
-                Sign Out
-              </button>
+              {/* Render tombol secara kondisional untuk versi Mobile */}
+              {isLoggedIn ? (
+                <button
+                  onClick={handleLogout}
+                  className="group flex w-full items-center gap-3.5 rounded-xl px-4 py-3.5 text-sm font-bold text-rose-600 transition-colors hover:bg-rose-50"
+                >
+                  <LogOut size={20} className="transition-transform group-hover:-translate-x-1" />
+                  Sign Out
+                </button>
+              ) : (
+                <button
+                  onClick={handleLogin}
+                  className="group flex w-full items-center gap-3.5 rounded-xl px-4 py-3.5 text-sm font-bold text-brand-600 transition-colors hover:bg-brand-50"
+                >
+                  <LogIn size={20} className="transition-transform group-hover:translate-x-1" />
+                  Log In
+                </button>
+              )}
             </div>
           </div>
         </div>
