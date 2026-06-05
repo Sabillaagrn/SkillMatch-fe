@@ -10,7 +10,7 @@ import {
   Tooltip,
   LabelList,
 } from "recharts";
-import { Card, Dropdown, Spinner } from "../components/ui.jsx"; // Pastikan komponen Spinner sudah di-import
+import { Card, Dropdown, Spinner } from "../components/ui.jsx";
 
 // Data sementara (Mock Data) yang akan digantikan API nanti
 const MOCK_TREND = [
@@ -25,14 +25,14 @@ const MOCK_TREND = [
 ];
 
 const MOCK_SKILLS = [
-  { name: "Software Engineering (ENG)", pct: 88, color: "#1d4ed8" }, // TECH
-  { name: "Data Analysis & Analytics (ANLS)", pct: 76, color: "#1d4ed8" }, // TECH
-  { name: "UI/UX Design (DSGN)", pct: 72, color: "#14b8a6" }, // NON_TECH
-  { name: "Project Management (PRJM)", pct: 65, color: "#14b8a6" }, // NON_TECH
-  { name: "IT Infrastructure (IT)", pct: 60, color: "#1d4ed8" }, // TECH
-  { name: "Marketing & SEO (MRKT)", pct: 45, color: "#14b8a6" }, // NON_TECH
-  { name: "Sales & Revenue (SALE)", pct: 38, color: "#14b8a6" }, // NON_TECH
-  { name: "Business Development (BD)", pct: 30, color: "#14b8a6" }, // NON_TECH
+  { name: "Software Engineering (ENG)", pct: 88, color: "#1d4ed8" },
+  { name: "Data Analysis & Analytics (ANLS)", pct: 76, color: "#1d4ed8" },
+  { name: "UI/UX Design (DSGN)", pct: 72, color: "#14b8a6" },
+  { name: "Project Management (PRJM)", pct: 65, color: "#14b8a6" },
+  { name: "IT Infrastructure (IT)", pct: 60, color: "#1d4ed8" },
+  { name: "Marketing & SEO (MRKT)", pct: 45, color: "#14b8a6" },
+  { name: "Sales & Revenue (SALE)", pct: 38, color: "#14b8a6" },
+  { name: "Business Development (BD)", pct: 30, color: "#14b8a6" },
 ];
 
 const TECH = "#1d4ed8";
@@ -52,9 +52,9 @@ const SORT_OPTIONS = [
 
 function LegendDot({ color, label }) {
   return (
-    <span className="inline-flex items-center gap-2 text-sm font-semibold text-ink">
+    <span className="inline-flex items-center gap-2 text-sm font-medium text-ink">
       <span
-        className="h-2.5 w-2.5 rounded-sm"
+        className="h-3 w-3 rounded-full"
         style={{ backgroundColor: color }}
       />
       {label}
@@ -64,14 +64,16 @@ function LegendDot({ color, label }) {
 
 function SkillRow({ name, pct, color }) {
   return (
-    <div>
+    <div className="group">
       <div className="mb-2 flex items-center justify-between">
-        <span className="text-sm font-bold text-ink">{name}</span>
+        <span className="text-sm font-semibold text-ink group-hover:text-opacity-80 transition-colors">
+          {name}
+        </span>
         <span className="text-sm font-bold text-ink">{pct}%</span>
       </div>
-      <div className="h-2.5 w-full rounded-full bg-brand-100">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-brand-100/50">
         <div
-          className="h-2.5 rounded-full transition-all"
+          className="h-full rounded-full transition-all duration-500 ease-out"
           style={{ width: `${pct}%`, backgroundColor: color }}
         />
       </div>
@@ -83,20 +85,14 @@ export default function Dashboard() {
   const [range, setRange] = useState("all");
   const [sort, setSort] = useState("high");
   
-  // State untuk menyimpan data dinamis dan status loading
   const [trendData, setTrendData] = useState([]);
   const [skillsData, setSkillsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulasi pemanggilan API (Mocking)
   useEffect(() => {
     const fetchDashboardData = async () => {
       setIsLoading(true);
-      
-      // Simulasi delay jaringan selama 1.2 detik biar terasa seperti ambil data asli
       await new Promise((resolve) => setTimeout(resolve, 1200));
-      
-      // Masukkan data mock ke dalam state
       setTrendData(MOCK_TREND);
       setSkillsData(MOCK_SKILLS);
       setIsLoading(false);
@@ -105,17 +101,15 @@ export default function Dashboard() {
     fetchDashboardData();
   }, []);
 
-  // Tampilkan spinner jika data "belum datang"
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center space-y-4">
-        <Spinner className="h-8 w-8 text-brand-600" />
-        <p className="text-sm font-medium text-muted">Memuat data pasar kerja terkini...</p>
+        <Spinner className="h-8 w-8 text-brand-600 animate-spin" />
+        <p className="text-sm font-medium text-muted animate-pulse">Memuat data pasar kerja terkini...</p>
       </div>
     );
   }
 
-  // Logika UI tetap sama, tapi sekarang merujuk ke data di dalam state
   const currentTrend = range === "all" ? trendData : trendData.slice(-Number(range));
 
   const sortedSkills = [...skillsData].sort((a, b) => {
@@ -128,41 +122,45 @@ export default function Dashboard() {
   const columns = [sortedSkills.slice(0, mid), sortedSkills.slice(mid)];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-ink">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+      {/* Header Section */}
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-ink">
             Dashboard Tren Skill
           </h1>
-          <p className="mt-1 text-sm text-muted">
+          <p className="text-sm text-muted">
             Pantau pergerakan pasar kerja dan sesuaikan jalur karirmu.
           </p>
         </div>
-        <div className="flex items-center gap-2 rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm text-muted shadow-card">
-          <Search size={16} />
+        
+        {/* Search Input */}
+        <div className="flex w-full sm:w-auto items-center gap-2 rounded-xl border border-line bg-white px-4 py-2.5 text-sm text-muted shadow-sm transition-all focus-within:border-brand-500 focus-within:ring-2 focus-within:ring-brand-500/20">
+          <Search size={18} className="text-muted" />
           <input
-            className="w-44 bg-transparent outline-none placeholder:text-muted"
+            className="w-full sm:w-56 bg-transparent outline-none placeholder:text-muted/70 text-ink"
             placeholder="Cari skill atau peran…"
           />
         </div>
       </div>
 
-      <Card className="p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-ink">Tren Pasar Kerja</h2>
+      {/* Chart Section */}
+      <Card className="p-4 sm:p-6 lg:p-8 shadow-card">
+        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-lg sm:text-xl font-bold text-ink">Tren Pasar Kerja</h2>
           <Dropdown value={range} onChange={setRange} options={RANGE_OPTIONS} />
         </div>
 
-        <div className="mb-4 flex justify-center gap-6">
+        <div className="mb-6 flex flex-wrap justify-center gap-x-8 gap-y-3">
           <LegendDot color={TECH} label="Teknologi" />
           <LegendDot color={NON_TECH} label="Non-Teknologi" />
         </div>
 
-        <div className="h-[320px] w-full">
+        <div className="h-[280px] sm:h-[350px] lg:h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={currentTrend}
-              margin={{ top: 24, right: 16, left: 0, bottom: 0 }}
+              margin={{ top: 24, right: 16, left: -16, bottom: 0 }}
             >
               <defs>
                 <linearGradient id="techFill" x1="0" y1="0" x2="0" y2="1">
@@ -184,7 +182,7 @@ export default function Dashboard() {
                 tickLine={false}
                 axisLine={false}
                 tick={{ fill: "#64748b", fontSize: 12 }}
-                dy={8}
+                dy={12}
               />
               <YAxis
                 domain={[0, 1100]}
@@ -192,13 +190,14 @@ export default function Dashboard() {
                 tickLine={false}
                 axisLine={false}
                 tick={{ fill: "#64748b", fontSize: 12 }}
-                width={40}
+                width={60}
               />
               <Tooltip
                 contentStyle={{
-                  borderRadius: 12,
+                  borderRadius: "12px",
                   border: "1px solid #e8edf5",
-                  boxShadow: "0 4px 16px rgba(16,24,40,.08)",
+                  boxShadow: "0 10px 25px -5px rgba(16,24,40,.05), 0 8px 10px -6px rgba(16,24,40,.01)",
+                  padding: "12px",
                 }}
               />
               <Area
@@ -206,15 +205,15 @@ export default function Dashboard() {
                 dataKey="tech"
                 name="Teknologi"
                 stroke={TECH}
-                strokeWidth={2.5}
+                strokeWidth={3}
                 fill="url(#techFill)"
                 dot={{ r: 4, fill: "#fff", stroke: TECH, strokeWidth: 2 }}
-                activeDot={{ r: 5 }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
               >
                 <LabelList
                   dataKey="tech"
                   position="top"
-                  offset={12}
+                  offset={14}
                   style={{ fill: "#0f172a", fontSize: 12, fontWeight: 700 }}
                 />
               </Area>
@@ -223,36 +222,32 @@ export default function Dashboard() {
                 dataKey="nonTech"
                 name="Non-Teknologi"
                 stroke={NON_TECH}
-                strokeWidth={2.5}
+                strokeWidth={3}
                 fill="url(#nonTechFill)"
                 dot={{ r: 4, fill: "#fff", stroke: NON_TECH, strokeWidth: 2 }}
-                activeDot={{ r: 5 }}
+                activeDot={{ r: 6, strokeWidth: 0 }}
               >
                 <LabelList
                   dataKey="nonTech"
                   position="top"
-                  offset={12}
+                  offset={14}
                   style={{ fill: "#0f172a", fontSize: 12, fontWeight: 700 }}
                 />
               </Area>
             </AreaChart>
           </ResponsiveContainer>
         </div>
-
-        <div className="mt-2 flex justify-center gap-6">
-          <LegendDot color={TECH} label="Teknologi" />
-          <LegendDot color={NON_TECH} label="Non-Teknologi" />
-        </div>
       </Card>
 
-      <Card className="p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-ink">Skill Paling Dicari</h2>
+      {/* Skills Section */}
+      <Card className="p-4 sm:p-6 lg:p-8 shadow-card">
+        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-lg sm:text-xl font-bold text-ink">Skill Paling Dicari</h2>
           <Dropdown value={sort} onChange={setSort} options={SORT_OPTIONS} />
         </div>
-        <div className="grid gap-x-10 gap-y-6 md:grid-cols-2">
+        <div className="grid gap-x-12 gap-y-8 md:grid-cols-2 lg:gap-x-16">
           {columns.map((col, i) => (
-            <div key={i} className="space-y-6">
+            <div key={i} className="flex flex-col gap-6">
               {col.map((s) => (
                 <SkillRow key={s.name} {...s} />
               ))}
