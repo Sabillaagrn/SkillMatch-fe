@@ -1,5 +1,7 @@
 // Thin fetch wrapper around the SkillMatch FastAPI backend.
-const BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+const BASE =
+  import.meta.env.VITE_API_URL ||
+  "https://skilmatch.up.railway.app";
 
 async function post(path, body) {
   let res;
